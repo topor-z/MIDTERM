@@ -1,5 +1,8 @@
 library(readr)
 library(plyr)
+library(stringr)
+library(dplyr)
+library(lubridate)
 
 #read in the csv
 eggs<- read_csv("~/Desktop/midterm/data/erdCalCOFIcufes_bb4a_5c83_ad3a.csv")
@@ -26,9 +29,22 @@ zoop$Lon_Deg<-as.numeric(zoop$Lon_Deg)
 zoop$Lon_DecDeg<- (zoop$Lon_mindec + zoop$Lon_Deg)*-1
   
 # create a date-time field
-  z$dateTime <- str_c(z$tow_date," ",z$tow_time,":00")
-z$dateTime <- as.POSIXct(strptime(z$dateTime, tz = "America/Los_Angeles")) #Hint: look up input time formats for the 'strptime' function
-z$tow_date <- NULL; z$tow_time <- NULL
+zoop$dateTime <- str_c(zoop$Tow_Date," ",zoop$Tow_Time,":00")
+
+zoop$tow_date <- NULL
+zoop$tow_time <- NULL
+
+
+
+##egg data set seems to be in working order to begin with
+##adding a year column 
+eggs$time_UTC <- gsub(x = eggs$time_UTC, pattern = "T", replacement = " ")
+
+eggs <- eggs[,c(1:4,5:26)]
+
+#export data
+write.table(zoop, file = "zoop", sep = "\t", col.names = TRUE)
+write.table(eggs, file = "eggs", sep = "\t", col.names = TRUE)
 
 
 
