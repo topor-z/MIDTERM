@@ -43,8 +43,8 @@ eggs$time_UTC <- gsub(x = eggs$time_UTC, pattern = "T", replacement = " ")
 eggs <- eggs[,c(1:4,5:26)]
 
 #export data
-write.table(zoop, file = "zoop", sep = "\t", col.names = TRUE)
-write.table(eggs, file = "eggs", sep = "\t", col.names = TRUE)
+write.table(zoop, "zoop.txt", sep = "\t", row.names = FALSE)
+write.table(eggs, "eggs.txt", sep = "\t", row.names = FALSE)
 
 
 
