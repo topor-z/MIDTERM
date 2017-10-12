@@ -3,7 +3,7 @@ library(plyr)
 library(stringr)
 library(dplyr)
 library(lubridate)
-
+library(stringi)
 #read in the csv
 eggs<- read_csv("~/Desktop/midterm/data/erdCalCOFIcufes_bb4a_5c83_ad3a.csv")
 zoop <- read_csv("~/Desktop/midterm/data/195101-201404_Zoop.csv")
@@ -45,6 +45,16 @@ eggs <- eggs[,c(1:4,5:26)]
 #export data
 write.table(zoop, "zoop.txt", sep = "\t", row.names = FALSE)
 write.table(eggs, "eggs.txt", sep = "\t", row.names = FALSE)
+##whittling down dataset for map
+head(zoop)
+head(eggs)
+str(eggs)
 
+fishegg<- eggs[,c(1,5,6,7,21,22)]
+str(nino)
 
-
+fishegg$year<-stri_extract(fishegg$time_UTC, regex = '[^-]*')
+seven<- dplyr::filter(fishegg, year>1996)
+nino<-dplyr::filter(seven, year<1999)
+nino$year<- as.numeric(nino$year)
+summary(nino)
