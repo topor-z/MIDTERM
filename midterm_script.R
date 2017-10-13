@@ -29,32 +29,37 @@ zoop$Lon_Deg<-as.numeric(zoop$Lon_Deg)
 zoop$Lon_DecDeg<- (zoop$Lon_mindec + zoop$Lon_Deg)*-1
   
 # create a date-time field
+zoop$Tow_Date<- as.Date(zoop$Tow_Date, format = "%m/%d/%Y")
 zoop$dateTime <- str_c(zoop$Tow_Date," ",zoop$Tow_Time,":00")
 
 zoop$tow_date <- NULL
 zoop$tow_time <- NULL
 
-
+eggs$year<- as.numeric(eggs$year)
 
 ##egg data set seems to be in working order to begin with
 ##adding a year column 
 eggs$time_UTC <- gsub(x = eggs$time_UTC, pattern = "T", replacement = " ")
 
 eggs <- eggs[,c(1:4,5:26)]
-
+str(zoop)
 #export data
-write.table(zoop, "zoop.txt", sep = "\t", row.names = FALSE)
-write.table(eggs, "eggs.txt", sep = "\t", row.names = FALSE)
+write.table(zoop, "zoop1.txt", sep = "\t", row.names = FALSE)
+write.table(eggs, "finaleggs.txt", sep = "\t", row.names = FALSE)
+write.table(zoop, "zooplankton.txt", sep = "\t", row.names = FALSE)
 ##whittling down dataset for map
+
 head(zoop)
 head(eggs)
 str(eggs)
 
-fishegg<- eggs[,c(1,5,6,7,21,22)]
+eggs<- eggs[,c(1,5,6,7,21,22)]
 str(nino)
 
-fishegg$year<-stri_extract(fishegg$time_UTC, regex = '[^-]*')
+eggs$year<-stri_extract(eggs$time_UTC, regex = '[^-]*')
 seven<- dplyr::filter(fishegg, year>1996)
 nino<-dplyr::filter(seven, year<1999)
 nino$year<- as.numeric(nino$year)
 summary(nino)
+
+write.csv(nino, 'nino.csv')
